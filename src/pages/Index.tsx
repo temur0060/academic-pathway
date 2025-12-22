@@ -3,9 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { BookOpen, GraduationCap, FileText, Clock, ArrowRight } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Index = () => {
   const scrollRef = useScrollAnimation();
+  const { t } = useLanguage();
 
   return (
     <div ref={scrollRef} className="min-h-screen bg-background">
@@ -16,20 +18,20 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center animate-fade-up">
             <h1 className="font-serif text-4xl md:text-6xl font-bold mb-6">
-              Akademik Yozuv Fani
+              {t('home.title')}
             </h1>
             <p className="text-lg md:text-xl opacity-90 mb-8">
-              Ilmiy yozuv san'atini o'rganing va professional darajaga ko'tariling
+              {t('home.subtitle')}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/mavzular">
                 <Button variant="glass" size="lg">
-                  <BookOpen className="w-5 h-5 mr-2" /> Mavzularni o'rganing
+                  <BookOpen className="w-5 h-5 mr-2" /> {t('home.learnTopics')}
                 </Button>
               </Link>
               <Link to="/test">
                 <Button variant="glass" size="lg">
-                  <FileText className="w-5 h-5 mr-2" /> Testni boshlash
+                  <FileText className="w-5 h-5 mr-2" /> {t('home.startTest')}
                 </Button>
               </Link>
             </div>
@@ -47,11 +49,9 @@ const Index = () => {
                   <GraduationCap className="w-16 h-16 text-primary-foreground" />
                 </div>
                 <div className="text-center md:text-left">
-                  <h2 className="font-serif text-3xl font-bold text-foreground mb-2">Professor Bazarov</h2>
-                  <p className="text-primary font-medium mb-4">Akademik Yozuv Fani O'qituvchisi</p>
-                  <p className="text-muted-foreground">
-                    Ko'p yillik tajribaga ega mutaxassis. Talabalarga ilmiy yozuv san'atini o'rgatish va ularni professional darajaga olib chiqish ustida ishlaydi.
-                  </p>
+                  <h2 className="font-serif text-3xl font-bold text-foreground mb-2">{t('home.professorName')}</h2>
+                  <p className="text-primary font-medium mb-4">{t('home.professorTitle')}</p>
+                  <p className="text-muted-foreground">{t('home.professorDesc')}</p>
                 </div>
               </div>
             </div>
@@ -63,13 +63,13 @@ const Index = () => {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto animate-on-scroll">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-8">Fan Haqida</h2>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-8">{t('home.aboutSubject')}</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {[
-                { icon: BookOpen, title: "60 ta Mavzu", desc: "4 bo'limda to'liq ma'lumotlar" },
-                { icon: FileText, title: "90 ta Test", desc: "Bilimingizni sinab ko'ring" },
-                { icon: Clock, title: "30 Daqiqa", desc: "Test uchun ajratilgan vaqt" },
-                { icon: GraduationCap, title: "Sertifikat", desc: "Muvaffaqiyatli tugatganlar uchun" },
+                { icon: BookOpen, title: `60 ${t('home.topics')}`, desc: t('home.topicsDesc') },
+                { icon: FileText, title: `90 ${t('home.tests')}`, desc: t('home.testsDesc') },
+                { icon: Clock, title: `30 ${t('home.minutes')}`, desc: t('home.minutesDesc') },
+                { icon: GraduationCap, title: t('home.certificate'), desc: t('home.certificateDesc') },
               ].map((item, i) => (
                 <div key={i} className="bg-card rounded-xl p-6 shadow-elegant hover-lift">
                   <item.icon className="w-10 h-10 text-primary mb-4" />
@@ -85,11 +85,11 @@ const Index = () => {
       {/* CTA */}
       <section className="py-16 bg-gradient-primary text-primary-foreground">
         <div className="container mx-auto px-4 text-center animate-on-scroll">
-          <h2 className="font-serif text-3xl font-bold mb-4">Hoziroq Boshlang!</h2>
-          <p className="mb-8 opacity-90">Akademik yozuv bo'yicha bilimingizni sinab ko'ring</p>
+          <h2 className="font-serif text-3xl font-bold mb-4">{t('home.startNow')}</h2>
+          <p className="mb-8 opacity-90">{t('home.testYourKnowledge')}</p>
           <Link to="/test">
             <Button variant="glass" size="xl">
-              Testni Boshlash <ArrowRight className="ml-2" />
+              {t('home.startTest')} <ArrowRight className="ml-2" />
             </Button>
           </Link>
         </div>
@@ -98,7 +98,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="py-8 bg-secondary text-secondary-foreground">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-sm opacity-80">© 2024 Akademik Yozuv Platformasi. Barcha huquqlar himoyalangan.</p>
+          <p className="text-sm opacity-80">{t('home.footer')}</p>
         </div>
       </footer>
     </div>
