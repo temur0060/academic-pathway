@@ -1,35 +1,38 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, BookOpen, User, Home, FileText, ClipboardList, LogIn, LogOut, Settings } from 'lucide-react';
+import { Menu, X, BookOpen, Home, FileText, ClipboardList, LogIn, LogOut, Settings, Sun, Moon, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage, Language } from '@/contexts/LanguageContext';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [showLangMenu, setShowLangMenu] = useState(false);
   const location = useLocation();
   const { isAuthenticated, logout } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
 
-  // Close menu on route change
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
 
-  // Prevent body scroll when menu is open
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
   const navLinks = [
-    { to: '/', label: 'Bosh sahifa', icon: Home },
-    { to: '/mavzular', label: 'Mavzular', icon: FileText },
-    { to: '/test', label: 'Test', icon: ClipboardList },
+    { to: '/', label: t('nav.home'), icon: Home },
+    { to: '/mavzular', label: t('nav.topics'), icon: FileText },
+    { to: '/test', label: t('nav.test'), icon: ClipboardList },
+  ];
+
+  const languages: { code: Language; label: string }[] = [
+    { code: 'uz', label: "O'zb" },
+    { code: 'ru', label: 'Рус' },
+    { code: 'en', label: 'Eng' },
   ];
 
   return (
@@ -41,11 +44,11 @@ export function Navbar() {
               <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center">
                 <BookOpen className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="hidden sm:inline">Akademik Yozuv</span>
+              <span className="hidden sm:inline">{t('nav.academicWriting')}</span>
             </Link>
 
             {/* Desktop Nav */}
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
@@ -58,80 +61,98 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
+              
+              {/* Language Selector */}
+              <div className="relative">
+                <Button variant="ghost" size="sm" onClick={() => setShowLangMenu(!showLangMenu)} className="gap-1">
+                  <Globe className="w-4 h-4" />
+                  {languages.find(l => l.code === language)?.label}
+                </Button>
+                {showLangMenu && (
+                  <div className="absolute top-full right-0 mt-1 bg-card border border-border rounded-lg shadow-lg py-1 min-w-[100px]">
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => { setLanguage(lang.code); setShowLangMenu(false); }}
+                        className={`w-full px-4 py-2 text-left text-sm hover:bg-muted ${language === lang.code ? 'text-primary font-medium' : ''}`}
+                      >
+                        {lang.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Theme Toggle */}
+              <Button variant="ghost" size="icon" onClick={toggleTheme}>
+                {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </Button>
+
               {isAuthenticated ? (
                 <div className="flex items-center gap-2">
                   <Link to="/admin">
                     <Button variant="outline" size="sm" className="gap-2">
-                      <Settings className="w-4 h-4" /> Admin
+                      <Settings className="w-4 h-4" /> {t('nav.admin')}
                     </Button>
                   </Link>
                   <Button variant="ghost" size="sm" onClick={logout} className="gap-2">
-                    <LogOut className="w-4 h-4" /> Chiqish
+                    <LogOut className="w-4 h-4" /> {t('nav.logout')}
                   </Button>
                 </div>
               ) : (
                 <Link to="/login">
                   <Button variant="default" size="sm" className="gap-2">
-                    <LogIn className="w-4 h-4" /> Ustoz kirish
+                    <LogIn className="w-4 h-4" /> {t('nav.login')}
                   </Button>
                 </Link>
               )}
             </div>
 
             {/* Mobile Menu Button */}
-            <button 
-              className="md:hidden p-2 rounded-xl hover:bg-muted transition-colors" 
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            <div className="flex items-center gap-2 md:hidden">
+              <Button variant="ghost" size="icon" onClick={toggleTheme}>
+                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </Button>
+              <button className="p-2 rounded-xl hover:bg-muted transition-colors" onClick={() => setIsOpen(!isOpen)}>
+                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay - Right Side Slide */}
-      <div 
-        className={`fixed inset-0 z-[100] md:hidden transition-opacity duration-300 ${
-          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
-      >
-        {/* Backdrop */}
-        <div 
-          className="absolute inset-0 bg-background/80 backdrop-blur-sm"
-          onClick={() => setIsOpen(false)}
-        />
-        
-        {/* Menu Panel */}
-        <div 
-          className={`absolute top-0 right-0 h-full w-[280px] bg-card border-l border-border shadow-2xl transition-transform duration-300 ease-out ${
-            isOpen ? 'translate-x-0' : 'translate-x-full'
-          }`}
-        >
+      {/* Mobile Menu */}
+      <div className={`fixed inset-0 z-[100] md:hidden transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
+        <div className={`absolute top-0 right-0 h-full w-[280px] bg-card border-l border-border shadow-2xl transition-transform duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="flex flex-col h-full">
-            {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-border">
-              <span className="font-serif text-lg font-bold text-primary">Menyu</span>
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="p-2 rounded-xl hover:bg-muted transition-colors"
-              >
+              <span className="font-serif text-lg font-bold text-primary">{t('nav.menu')}</span>
+              <button onClick={() => setIsOpen(false)} className="p-2 rounded-xl hover:bg-muted">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Links */}
+            {/* Language Selector Mobile */}
+            <div className="flex gap-1 p-4 border-b border-border">
+              {languages.map((lang) => (
+                <button
+                  key={lang.code}
+                  onClick={() => setLanguage(lang.code)}
+                  className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${language === lang.code ? 'bg-primary text-primary-foreground' : 'bg-muted hover:bg-muted/80'}`}
+                >
+                  {lang.label}
+                </button>
+              ))}
+            </div>
+
             <div className="flex-1 overflow-y-auto py-4">
-              {navLinks.map((link, index) => (
+              {navLinks.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
                   onClick={() => setIsOpen(false)}
-                  className={`flex items-center gap-4 px-6 py-4 transition-all ${
-                    location.pathname === link.to 
-                      ? 'bg-primary/10 text-primary border-r-4 border-primary' 
-                      : 'text-foreground hover:bg-muted hover:text-primary'
-                  }`}
-                  style={{ animationDelay: `${index * 50}ms` }}
+                  className={`flex items-center gap-4 px-6 py-4 transition-all ${location.pathname === link.to ? 'bg-primary/10 text-primary border-r-4 border-primary' : 'text-foreground hover:bg-muted'}`}
                 >
                   <link.icon className="w-5 h-5" />
                   <span className="font-medium">{link.label}</span>
@@ -139,34 +160,19 @@ export function Navbar() {
               ))}
             </div>
 
-            {/* Footer */}
             <div className="p-4 border-t border-border space-y-3">
               {isAuthenticated ? (
                 <>
-                  <Link 
-                    to="/admin" 
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-3 w-full p-3 rounded-xl bg-primary/10 text-primary font-medium"
-                  >
-                    <Settings className="w-5 h-5" />
-                    Admin Panel
+                  <Link to="/admin" onClick={() => setIsOpen(false)} className="flex items-center gap-3 w-full p-3 rounded-xl bg-primary/10 text-primary font-medium">
+                    <Settings className="w-5 h-5" /> {t('nav.admin')}
                   </Link>
-                  <button 
-                    onClick={() => { logout(); setIsOpen(false); }}
-                    className="flex items-center gap-3 w-full p-3 rounded-xl bg-destructive/10 text-destructive font-medium"
-                  >
-                    <LogOut className="w-5 h-5" />
-                    Chiqish
+                  <button onClick={() => { logout(); setIsOpen(false); }} className="flex items-center gap-3 w-full p-3 rounded-xl bg-destructive/10 text-destructive font-medium">
+                    <LogOut className="w-5 h-5" /> {t('nav.logout')}
                   </button>
                 </>
               ) : (
-                <Link 
-                  to="/login" 
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center gap-2 w-full p-3 rounded-xl bg-gradient-primary text-primary-foreground font-medium"
-                >
-                  <LogIn className="w-5 h-5" />
-                  Ustoz kirish
+                <Link to="/login" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-2 w-full p-3 rounded-xl bg-gradient-primary text-primary-foreground font-medium">
+                  <LogIn className="w-5 h-5" /> {t('nav.login')}
                 </Link>
               )}
             </div>
