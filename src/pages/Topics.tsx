@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar } from '@/components/Navbar';
 import { sections } from '@/data/topicsData';
-import { ChevronRight, BookOpen, Layers, ArrowRight } from 'lucide-react';
+import { ChevronRight, BookOpen, Layers, ArrowRight, Sparkles } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Topics = () => {
   const [selectedSection, setSelectedSection] = useState<number | null>(null);
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-background">
@@ -14,63 +16,80 @@ const Topics = () => {
         <div className="container mx-auto px-4">
           {/* Header */}
           <div className="text-center mb-12 animate-fade-up">
-            <div className="w-16 h-16 mx-auto mb-4 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-glow">
-              <Layers className="w-8 h-8 text-primary-foreground" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-4 border border-primary/20">
+              <Sparkles className="w-4 h-4" />
+              <span className="text-sm font-medium">O'rganish materiallari</span>
             </div>
-            <h1 className="font-serif text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Mavzular
+            <h1 className="font-serif text-3xl md:text-5xl font-bold text-foreground mb-3">
+              {t('nav.topics')}
             </h1>
-            <p className="text-muted-foreground mt-2">4 ta bo'lim, 60 ta mavzu</p>
+            <div className="decoration-line mx-auto my-4" />
+            <p className="text-muted-foreground">4 ta bo'lim, 60 ta mavzu</p>
           </div>
           
-          <div className="max-w-4xl mx-auto grid gap-4">
+          <div className="max-w-4xl mx-auto grid gap-5">
             {sections.map((section, idx) => (
               <div key={section.id} className="animate-fade-up" style={{ animationDelay: `${idx * 0.1}s` }}>
                 <button
                   onClick={() => setSelectedSection(selectedSection === section.id ? null : section.id)}
-                  className={`w-full rounded-2xl p-6 shadow-elegant text-left flex items-center justify-between transition-all border-2 ${
+                  className={`w-full rounded-2xl p-6 text-left flex items-center justify-between transition-all duration-300 group ${
                     selectedSection === section.id 
-                      ? 'bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/30' 
-                      : 'bg-card border-transparent hover:border-primary/20 hover:shadow-glow/50'
+                      ? 'bg-gradient-primary text-primary-foreground shadow-glow' 
+                      : 'card-elegant hover-lift hover:border-primary/30'
                   }`}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all ${
+                  <div className="flex items-center gap-5">
+                    <div className={`w-16 h-16 rounded-xl flex items-center justify-center transition-all ${
                       selectedSection === section.id 
-                        ? 'bg-gradient-primary shadow-glow' 
-                        : 'bg-primary/10'
+                        ? 'bg-primary-foreground/20' 
+                        : 'bg-gradient-primary shadow-glow'
                     }`}>
-                      <BookOpen className={`w-7 h-7 ${
-                        selectedSection === section.id ? 'text-primary-foreground' : 'text-primary'
+                      <BookOpen className={`w-8 h-8 ${
+                        selectedSection === section.id ? 'text-primary-foreground' : 'text-primary-foreground'
                       }`} />
                     </div>
                     <div>
-                      <h2 className="font-serif text-lg font-bold text-foreground">{section.title}</h2>
-                      <p className="text-sm text-muted-foreground">{section.description}</p>
-                      <p className="text-xs text-primary mt-1">{section.topics.length} ta mavzu</p>
+                      <h2 className={`font-serif text-xl font-bold mb-1 ${
+                        selectedSection === section.id ? 'text-primary-foreground' : 'text-foreground'
+                      }`}>
+                        {section.title}
+                      </h2>
+                      <p className={`text-sm ${
+                        selectedSection === section.id ? 'text-primary-foreground/80' : 'text-muted-foreground'
+                      }`}>
+                        {section.description}
+                      </p>
+                      <div className={`inline-flex items-center gap-1 mt-2 text-xs font-medium px-2 py-1 rounded-full ${
+                        selectedSection === section.id 
+                          ? 'bg-primary-foreground/20 text-primary-foreground' 
+                          : 'bg-accent/20 text-accent'
+                      }`}>
+                        <Layers className="w-3 h-3" />
+                        {section.topics.length} ta mavzu
+                      </div>
                     </div>
                   </div>
-                  <ChevronRight className={`w-6 h-6 text-primary transition-transform duration-300 ${
-                    selectedSection === section.id ? 'rotate-90' : ''
+                  <ChevronRight className={`w-6 h-6 transition-transform duration-300 ${
+                    selectedSection === section.id ? 'rotate-90 text-primary-foreground' : 'text-primary group-hover:translate-x-1'
                   }`} />
                 </button>
                 
                 {selectedSection === section.id && (
-                  <div className="mt-3 ml-4 grid gap-2 animate-fade-up">
+                  <div className="mt-4 ml-6 grid gap-3 animate-fade-up">
                     {section.topics.map((topic, topicIdx) => (
                       <Link
                         key={topic.id}
                         to={`/mavzu/${section.id}/${topic.id}`}
-                        className="group bg-card rounded-xl p-4 transition-all duration-300 flex items-center gap-4 border-2 border-transparent hover:border-secondary hover:bg-secondary/5 hover:shadow-md"
+                        className="group card-elegant p-5 flex items-center gap-4 hover:border-accent/50 hover:shadow-gold/30"
                         style={{ animationDelay: `${topicIdx * 30}ms` }}
                       >
-                        <span className="w-10 h-10 bg-secondary/10 rounded-lg flex items-center justify-center text-sm font-bold text-secondary group-hover:bg-secondary group-hover:text-secondary-foreground transition-all">
+                        <span className="w-12 h-12 bg-gradient-gold rounded-xl flex items-center justify-center text-sm font-bold text-foreground shadow-gold group-hover:scale-110 transition-transform">
                           {topic.id}
                         </span>
-                        <span className="font-medium text-foreground flex-1 group-hover:text-secondary transition-colors">
+                        <span className="font-medium text-foreground flex-1 group-hover:text-primary transition-colors">
                           {topic.title}
                         </span>
-                        <ArrowRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                        <ArrowRight className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-accent" />
                       </Link>
                     ))}
                   </div>

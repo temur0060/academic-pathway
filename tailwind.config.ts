@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        serif: ['Playfair Display', 'serif'],
+        sans: ['DM Sans', 'sans-serif'],
+        serif: ['Cormorant Garamond', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -51,16 +51,18 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        forest: {
-          DEFAULT: "hsl(var(--forest))",
-          light: "hsl(var(--forest-light))",
+        emerald: {
+          DEFAULT: "hsl(var(--emerald))",
+          light: "hsl(var(--emerald-light))",
+          dark: "hsl(var(--emerald-dark))",
         },
-        ocean: {
-          DEFAULT: "hsl(var(--ocean))",
-          light: "hsl(var(--ocean-light))",
+        gold: {
+          DEFAULT: "hsl(var(--gold))",
+          light: "hsl(var(--gold-light))",
+          dark: "hsl(var(--gold-dark))",
         },
         cream: "hsl(var(--cream))",
-        gold: "hsl(var(--gold))",
+        ivory: "hsl(var(--ivory))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -100,6 +102,20 @@ export default {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-10px)" },
         },
+        "float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-15px)" },
+        },
+        "glow-pulse": {
+          "0%, 100%": { 
+            boxShadow: "0 0 20px hsl(152 55% 33% / 0.2)",
+            borderColor: "hsl(152 55% 33% / 0.3)"
+          },
+          "50%": { 
+            boxShadow: "0 0 35px hsl(152 55% 33% / 0.35)",
+            borderColor: "hsl(152 55% 33% / 0.5)"
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -110,6 +126,8 @@ export default {
         "slide-in-right": "slide-in-right 0.6s ease-out",
         "scale-in": "scale-in 0.5s ease-out",
         "bounce-gentle": "bounce-gentle 2s ease-in-out infinite",
+        "float": "float 3s ease-in-out infinite",
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
       },
     },
   },
