@@ -1,17 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, BookOpen, Home, FileText, ClipboardList, LogIn, LogOut, Settings, Sun, Moon, Globe, Sparkles } from 'lucide-react';
+import { Menu, X, BookOpen, Home, FileText, ClipboardList, LogIn, LogOut, Settings, Sun, Moon, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { useLanguage, Language } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [showLangMenu, setShowLangMenu] = useState(false);
   const location = useLocation();
   const { isAuthenticated, logout } = useAuth();
-  const { language, setLanguage, t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -24,15 +21,9 @@ export function Navbar() {
   }, [isOpen]);
 
   const navLinks = [
-    { to: '/', label: t('nav.home'), icon: Home },
-    { to: '/mavzular', label: t('nav.topics'), icon: FileText },
-    { to: '/test', label: t('nav.test'), icon: ClipboardList },
-  ];
-
-  const languages: { code: Language; label: string; flag: string }[] = [
-    { code: 'uz', label: "O'zb", flag: '🇺🇿' },
-    { code: 'ru', label: 'Рус', flag: '🇷🇺' },
-    { code: 'en', label: 'Eng', flag: '🇬🇧' },
+    { to: '/', label: 'Bosh sahifa', icon: Home },
+    { to: '/mavzular', label: 'Mavzular', icon: FileText },
+    { to: '/test', label: 'Test', icon: ClipboardList },
   ];
 
   return (
@@ -45,7 +36,7 @@ export function Navbar() {
                 <BookOpen className="w-5 h-5 text-primary-foreground" />
               </div>
               <span className="hidden sm:inline font-serif text-lg font-bold text-foreground">
-                {t('nav.academicWriting')}
+                Akademik Yozuv
               </span>
             </Link>
 
@@ -65,42 +56,13 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              
-              {/* Language Selector */}
-              <div className="relative ml-2">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={() => setShowLangMenu(!showLangMenu)} 
-                  className="gap-2 hover:bg-muted"
-                >
-                  <Globe className="w-4 h-4 text-primary" />
-                  <span className="text-sm">{languages.find(l => l.code === language)?.flag}</span>
-                </Button>
-                {showLangMenu && (
-                  <div className="absolute top-full right-0 mt-2 bg-card border border-border rounded-xl shadow-elegant py-2 min-w-[120px] animate-scale-in">
-                    {languages.map((lang) => (
-                      <button
-                        key={lang.code}
-                        onClick={() => { setLanguage(lang.code); setShowLangMenu(false); }}
-                        className={`w-full px-4 py-2.5 text-left text-sm flex items-center gap-3 hover:bg-muted transition-colors ${
-                          language === lang.code ? 'text-primary font-medium bg-primary/5' : 'text-foreground'
-                        }`}
-                      >
-                        <span>{lang.flag}</span>
-                        {lang.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
 
               {/* Theme Toggle */}
               <Button 
                 variant="ghost" 
                 size="icon" 
                 onClick={toggleTheme}
-                className="hover:bg-muted"
+                className="hover:bg-muted ml-2"
               >
                 {theme === 'dark' ? (
                   <Sun className="w-4 h-4 text-accent" />
@@ -112,18 +74,18 @@ export function Navbar() {
               {isAuthenticated ? (
                 <div className="flex items-center gap-2 ml-2">
                   <Link to="/admin">
-                    <Button size="sm" className="gap-2 bg-gradient-gold text-foreground hover:opacity-90 shadow-gold">
-                      <Settings className="w-4 h-4" /> {t('nav.admin')}
+                    <Button size="sm" className="gap-2 btn-rose">
+                      <Settings className="w-4 h-4" /> Admin
                     </Button>
                   </Link>
                   <Button variant="ghost" size="sm" onClick={logout} className="gap-2 text-destructive hover:bg-destructive/10">
-                    <LogOut className="w-4 h-4" /> {t('nav.logout')}
+                    <LogOut className="w-4 h-4" /> Chiqish
                   </Button>
                 </div>
               ) : (
                 <Link to="/login" className="ml-2">
                   <Button size="sm" className="gap-2 bg-gradient-primary text-primary-foreground hover:opacity-90 shadow-glow">
-                    <LogIn className="w-4 h-4" /> {t('nav.login')}
+                    <LogIn className="w-4 h-4" /> Kirish
                   </Button>
                 </Link>
               )}
@@ -138,7 +100,7 @@ export function Navbar() {
                 className="p-2 rounded-xl hover:bg-muted transition-colors" 
                 onClick={() => setIsOpen(!isOpen)}
               >
-                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {isOpen ? <X className="w-6 h-6 text-foreground" /> : <Menu className="w-6 h-6 text-foreground" />}
               </button>
             </div>
           </div>
@@ -154,29 +116,11 @@ export function Navbar() {
             <div className="flex items-center justify-between p-5 border-b border-border bg-gradient-hero">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-accent" />
-                <span className="font-serif text-lg font-bold text-primary-foreground">{t('nav.menu')}</span>
+                <span className="font-serif text-lg font-bold text-primary-foreground">Menu</span>
               </div>
               <button onClick={() => setIsOpen(false)} className="p-2 rounded-xl hover:bg-primary-foreground/10 text-primary-foreground">
                 <X className="w-5 h-5" />
               </button>
-            </div>
-
-            {/* Language Selector Mobile */}
-            <div className="flex gap-2 p-4 border-b border-border bg-muted/30">
-              {languages.map((lang) => (
-                <button
-                  key={lang.code}
-                  onClick={() => setLanguage(lang.code)}
-                  className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2 ${
-                    language === lang.code 
-                      ? 'bg-gradient-primary text-primary-foreground shadow-glow' 
-                      : 'bg-card border border-border hover:border-primary/30'
-                  }`}
-                >
-                  <span>{lang.flag}</span>
-                  {lang.label}
-                </button>
-              ))}
             </div>
 
             {/* Nav Links */}
@@ -206,16 +150,16 @@ export function Navbar() {
             <div className="p-5 border-t border-border space-y-3 bg-muted/30">
               {isAuthenticated ? (
                 <>
-                  <Link to="/admin" onClick={() => setIsOpen(false)} className="flex items-center gap-3 w-full p-4 rounded-xl bg-gradient-gold text-foreground font-medium shadow-gold">
-                    <Settings className="w-5 h-5" /> {t('nav.admin')}
+                  <Link to="/admin" onClick={() => setIsOpen(false)} className="flex items-center gap-3 w-full p-4 rounded-xl btn-rose font-medium">
+                    <Settings className="w-5 h-5" /> Admin
                   </Link>
                   <button onClick={() => { logout(); setIsOpen(false); }} className="flex items-center gap-3 w-full p-4 rounded-xl bg-destructive/10 text-destructive font-medium border border-destructive/20">
-                    <LogOut className="w-5 h-5" /> {t('nav.logout')}
+                    <LogOut className="w-5 h-5" /> Chiqish
                   </button>
                 </>
               ) : (
                 <Link to="/login" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-3 w-full p-4 rounded-xl bg-gradient-primary text-primary-foreground font-medium shadow-glow">
-                  <LogIn className="w-5 h-5" /> {t('nav.login')}
+                  <LogIn className="w-5 h-5" /> Kirish
                 </Link>
               )}
             </div>
