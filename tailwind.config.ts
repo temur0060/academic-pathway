@@ -51,18 +51,16 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        emerald: {
-          DEFAULT: "hsl(var(--emerald))",
-          light: "hsl(var(--emerald-light))",
-          dark: "hsl(var(--emerald-dark))",
+        violet: {
+          DEFAULT: "hsl(var(--violet))",
+          light: "hsl(var(--violet-light))",
+          dark: "hsl(var(--violet-dark))",
         },
-        gold: {
-          DEFAULT: "hsl(var(--gold))",
-          light: "hsl(var(--gold-light))",
-          dark: "hsl(var(--gold-dark))",
+        rose: {
+          DEFAULT: "hsl(var(--rose))",
+          light: "hsl(var(--rose-light))",
+          dark: "hsl(var(--rose-dark))",
         },
-        cream: "hsl(var(--cream))",
-        ivory: "hsl(var(--ivory))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -108,12 +106,12 @@ export default {
         },
         "glow-pulse": {
           "0%, 100%": { 
-            boxShadow: "0 0 20px hsl(152 55% 33% / 0.2)",
-            borderColor: "hsl(152 55% 33% / 0.3)"
+            boxShadow: "0 0 20px hsl(262 83% 58% / 0.2)",
+            borderColor: "hsl(262 83% 58% / 0.3)"
           },
           "50%": { 
-            boxShadow: "0 0 35px hsl(152 55% 33% / 0.35)",
-            borderColor: "hsl(152 55% 33% / 0.5)"
+            boxShadow: "0 0 35px hsl(262 83% 58% / 0.35)",
+            borderColor: "hsl(262 83% 58% / 0.5)"
           },
         },
       },

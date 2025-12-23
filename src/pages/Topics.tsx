@@ -3,11 +3,9 @@ import { Link } from 'react-router-dom';
 import { Navbar } from '@/components/Navbar';
 import { sections } from '@/data/topicsData';
 import { ChevronRight, BookOpen, Layers, ArrowRight, Sparkles } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
 
 const Topics = () => {
   const [selectedSection, setSelectedSection] = useState<number | null>(null);
-  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-background">
@@ -21,7 +19,7 @@ const Topics = () => {
               <span className="text-sm font-medium">O'rganish materiallari</span>
             </div>
             <h1 className="font-serif text-3xl md:text-5xl font-bold text-foreground mb-3">
-              {t('nav.topics')}
+              Mavzular
             </h1>
             <div className="decoration-line mx-auto my-4" />
             <p className="text-muted-foreground">4 ta bo'lim, 60 ta mavzu</p>
@@ -44,9 +42,7 @@ const Topics = () => {
                         ? 'bg-primary-foreground/20' 
                         : 'bg-gradient-primary shadow-glow'
                     }`}>
-                      <BookOpen className={`w-8 h-8 ${
-                        selectedSection === section.id ? 'text-primary-foreground' : 'text-primary-foreground'
-                      }`} />
+                      <BookOpen className="w-8 h-8 text-primary-foreground" />
                     </div>
                     <div>
                       <h2 className={`font-serif text-xl font-bold mb-1 ${
@@ -80,10 +76,10 @@ const Topics = () => {
                       <Link
                         key={topic.id}
                         to={`/mavzu/${section.id}/${topic.id}`}
-                        className="group card-elegant p-5 flex items-center gap-4 hover:border-accent/50 hover:shadow-gold/30"
+                        className="group card-elegant p-5 flex items-center gap-4 hover:border-accent/50 hover:shadow-rose/30"
                         style={{ animationDelay: `${topicIdx * 30}ms` }}
                       >
-                        <span className="w-12 h-12 bg-gradient-gold rounded-xl flex items-center justify-center text-sm font-bold text-foreground shadow-gold group-hover:scale-110 transition-transform">
+                        <span className="w-12 h-12 bg-gradient-accent rounded-xl flex items-center justify-center text-sm font-bold text-accent-foreground shadow-rose group-hover:scale-110 transition-transform">
                           {topic.id}
                         </span>
                         <span className="font-medium text-foreground flex-1 group-hover:text-primary transition-colors">
